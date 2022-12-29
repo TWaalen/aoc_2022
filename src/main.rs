@@ -22,16 +22,16 @@ fn main() {
     println!("Solution for day {} part {}: {}", day, part, solver(&mut input));
 }
 
-fn get_solver_fn<R>(day: i32, part: i32) -> fn(&mut BufReader<R>) -> i32 where R: Read {
+fn get_solver_fn<R>(day: i32, part: i32) -> fn(&mut BufReader<R>) -> String where R: Read { 
     return match (day, part) {
-        (1, 0) => days::day1::solve,
-        (1, 1) => days::day1::solve2,
-        (2, 0) => days::day2::solve,
-        (2, 1) => days::day2::solve2,
-        (3, 0) => days::day3::calculate_misplaced_priority_of_rucksacks,
-        (3, 1) => days::day3::calculate_badge_priority_of_rucksacks,
-        (4, 0) => days::day4::count_fully_contained_sections,
-        (4, 1) => days::day4::count_overlapping_sections,
+        (1, 0) => |input| days::day1::solve(input).to_string(),
+        (1, 1) => |input| days::day1::solve2(input).to_string(),
+        (2, 0) => |input| days::day2::solve(input).to_string(),
+        (2, 1) => |input| days::day2::solve2(input).to_string(),
+        (3, 0) => |input| days::day3::calculate_misplaced_priority_of_rucksacks(input).to_string(),
+        (3, 1) => |input| days::day3::calculate_badge_priority_of_rucksacks(input).to_string(),
+        (4, 0) => |input| days::day4::count_fully_contained_sections(input).to_string(),
+        (4, 1) => |input| days::day4::count_overlapping_sections(input).to_string(),
         (_, _) => panic!("No solver found for day {} part {}", day , part)
     }
 }
