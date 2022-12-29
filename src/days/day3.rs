@@ -8,7 +8,7 @@ pub fn get_item_priority(character: char) -> i32 {
     return character as i32 - 38;
 }
 
-pub fn find_badge_item_in_rucksacks(rucksacks: &[String; 3]) -> char {
+pub fn find_badge_item_in_rucksacks(rucksacks: &Vec<String>) -> char {
     for character in rucksacks[0].chars() {
         if rucksacks[1].contains(character) && rucksacks[2].contains(character) {
             return character;
@@ -43,9 +43,10 @@ pub fn calculate_misplaced_priority_of_rucksacks<R>(reader: &mut BufReader<R>) -
 
 pub fn calculate_badge_priority_of_rucksacks<R>(reader: &mut BufReader<R>) -> i32 where R: Read {
     let mut priority: i32 = 0;
-    for lines in reader.lines().array_chunks::<3>() {
-        let rucksacks = lines.map(|line| line.expect("No line"));
-        let badge_item = find_badge_item_in_rucksacks(&rucksacks);
+    while !reader.fill_buf().unwrap().is_empty() {
+        let mut lines_iter = reader.lines();
+        let lines = lines_iter.by_ref().take(3).map(|line| line.unwrap()).collect::<Vec<_>>();
+        let badge_item = find_badge_item_in_rucksacks(&lines);
         priority += get_item_priority(badge_item);
     }
 

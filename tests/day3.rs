@@ -1,5 +1,3 @@
-#![feature(iter_array_chunks)]
-
 use std::io::{BufReader, BufRead};
 
 use aoc2022::days::day3::{get_item_priority, find_misplaced_item_in_rucksack, find_badge_item_in_rucksacks, calculate_misplaced_priority_of_rucksacks, calculate_badge_priority_of_rucksacks};
@@ -33,9 +31,11 @@ fn correct_misplaced_item() {
 
 #[test]
 fn correct_badge_item() {
-    let mut rucksack_chunks = TEST_INPUT.lines().map(|line| line.to_string()).array_chunks::<3>();
-    assert_eq!('r', find_badge_item_in_rucksacks(&rucksack_chunks.next().unwrap()));
-    assert_eq!('Z', find_badge_item_in_rucksacks(&rucksack_chunks.next().unwrap()));
+    let mut lines = TEST_INPUT.lines().map(|line| line.to_string());
+    let mut rucksacks = lines.by_ref().take(3).collect::<Vec<_>>();
+    assert_eq!('r', find_badge_item_in_rucksacks(&rucksacks));
+    rucksacks = lines.take(3).collect::<Vec<_>>();
+    assert_eq!('Z', find_badge_item_in_rucksacks(&rucksacks));
 }
 
 #[test]
