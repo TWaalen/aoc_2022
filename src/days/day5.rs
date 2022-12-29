@@ -60,10 +60,37 @@ pub fn execute_move_instructions(stacks: &mut Vec<Vec<char>>, move_instructions:
     }
 }
 
+pub fn execute_move_instructions_retain_order(stacks: &mut Vec<Vec<char>>, move_instructions: &Vec<MoveInstruction>) {
+    for move_instruction in move_instructions {
+        let  mut stacks_iter = stacks.iter_mut();
+
+        let from_stack;
+        let to_stack;
+        if move_instruction.from < move_instruction.to {
+            from_stack = stacks_iter.nth(move_instruction.from).unwrap();
+            to_stack = stacks_iter.nth(move_instruction.to - move_instruction.from - 1).unwrap();
+        } else {
+            to_stack = stacks_iter.nth(move_instruction.to).unwrap();
+            from_stack = stacks_iter.nth(move_instruction.from - move_instruction.to - 1).unwrap();
+        }
+        
+        to_stack.extend_from_slice(&from_stack[from_stack.len() - move_instruction.moves as usize..]);
+        from_stack.resize(from_stack.len() - move_instruction.moves as usize, ' ');
+    }
+}
+
 pub fn solve<R>(input: &mut BufReader<R>) -> String where R : Read {
     let mut crate_stacks = parse_crate_stacks(input);
     let move_instructions = parse_move_instructions(input);
     execute_move_instructions(&mut crate_stacks, &move_instructions);
+
+    return format!("{}", crate_stacks.iter().map(|stack| stack.last().unwrap()).collect::<Vec<&char>>().iter().cloned().collect::<String>());
+}
+
+pub fn solve2<R>(input: &mut BufReader<R>) -> String where R : Read {
+    let mut crate_stacks = parse_crate_stacks(input);
+    let move_instructions = parse_move_instructions(input);
+    execute_move_instructions_retain_order(&mut crate_stacks, &move_instructions);
 
     return format!("{}", crate_stacks.iter().map(|stack| stack.last().unwrap()).collect::<Vec<&char>>().iter().cloned().collect::<String>());
 }
