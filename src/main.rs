@@ -34,6 +34,7 @@ fn get_solver_fn<R>(day: i32, part: i32) -> fn(&mut BufReader<R>) -> String wher
         (4, 1) => |input| days::day4::count_overlapping_sections(input).to_string(),
         (5, 0) => days::day5::solve,
         (5, 1) => days::day5::solve2,
+        (6, 0) => days::day6::solve,
         (_, _) => panic!("No solver found for day {} part {}", day , part)
     }
 }
