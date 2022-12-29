@@ -26,3 +26,10 @@ pub fn solve<R>(input: &mut BufReader<R>) -> String where R : Read {
 
     return find_end_of_marker_index(&data, 4).to_string();
 }
+
+pub fn solve2<R>(input: &mut BufReader<R>) -> String where R : Read {
+    let mut data = Default::default();
+    input.read_to_string(&mut data).expect("Failed to read input");
+
+    return find_end_of_marker_index(&data, 14).to_string();
+}
